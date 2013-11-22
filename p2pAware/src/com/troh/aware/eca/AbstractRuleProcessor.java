@@ -4,6 +4,7 @@
 package com.troh.aware.eca;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,8 +24,15 @@ public abstract class AbstractRuleProcessor implements RuleProcessor {
 	 */
 	@Override
 	public void addRule(String eventType, String action) {
-		// TODO Auto-generated method stub
-
+		synchronized (ruleSet) {
+			if (ruleSet.containsKey(eventType)) {
+				ruleSet.get(eventType).add(action);
+			} else {
+				Set<String> newEventSet = new HashSet<String>();
+				newEventSet.add(action);
+				ruleSet.put(eventType, newEventSet);
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -32,17 +40,25 @@ public abstract class AbstractRuleProcessor implements RuleProcessor {
 	 */
 	@Override
 	public boolean removeRule(String eventType, String action) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean success;
+		synchronized (ruleSet) {
+			Set<String> actionConditions = ruleSet.get(eventType);
+			if (actionConditions == null) {
+				return false;
+			}
+			success = actionConditions.remove(action);
+		}
+		return success;
 	}
 
 	/* (non-Javadoc)
 	 * @see com.troh.aware.eca.RuleProcessor#matchEventToActions(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	public List<String> matchEventToActions(Model event) {
-		// TODO Auto-generated method stub
-		return null;
+	public abstract List<String> matchEventToActions(Model event);
+	
+	protected Map<String, Set<String>> getRuleSet() {
+		return ruleSet;
 	}
 
 }
