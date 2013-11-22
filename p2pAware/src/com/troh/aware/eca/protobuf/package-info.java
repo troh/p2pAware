@@ -5,4 +5,4 @@
  * @author tom
  *
  */
-package com.troh.aware.main;
+package com.troh.aware.eca.protobuf;
