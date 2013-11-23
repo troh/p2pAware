@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.hp.hpl.jena.rdf.model.Model;
+import com.troh.aware.util.MissingVariableBindingException;
 
 /**
  * @author tom
@@ -55,7 +56,7 @@ public abstract class AbstractRuleProcessor implements RuleProcessor {
 	 * @see com.troh.aware.eca.RuleProcessor#matchEventToActions(com.hp.hpl.jena.rdf.model.Model)
 	 */
 	@Override
-	public abstract List<String> matchEventToActions(Model event);
+	public abstract List<String> matchEventToActions(Model event) throws MalformedEventNotificationException, MissingVariableBindingException;
 	
 	protected Map<String, Set<String>> getRuleSet() {
 		return ruleSet;
