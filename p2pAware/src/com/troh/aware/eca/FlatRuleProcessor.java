@@ -5,6 +5,7 @@ package com.troh.aware.eca;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.hp.hpl.jena.query.QuerySolution;
@@ -35,12 +36,15 @@ public class FlatRuleProcessor extends AbstractRuleProcessor {
 		ResultSet queryResult = queryProcessor.runSelectQuery(event, queryStore.getEventTypeQuery());
 		QuerySolution solution = ensureSingleResult(queryResult);
 		String eventType = extractEventTypeURI(solution, queryStore.getEventTypeQueryVariable());
-		Set<String> actionConditions = getActionConditionsForEventType(eventType);
-		return (actionConditions == null) ? new ArrayList<String>(): new ArrayList<String>(actionConditions);
+		return getActionConditionsForEventType(eventType);
 	}
 	
-	private Set<String> getActionConditionsForEventType(String eventType) {
-		return null;
+	private List<String> getActionConditionsForEventType(String eventType) {
+		Map<String, Set<String>> ruleSet = getRuleSet();
+		synchronized (ruleSet) {
+			Set<String> actionConditions = ruleSet.get(eventType);
+			return (actionConditions == null) ? new ArrayList<String>() : new ArrayList<String>(actionConditions);
+		}
 	}
 	
 	private QuerySolution ensureSingleResult(ResultSet queryResult) throws MalformedEventNotificationException {
