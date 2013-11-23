@@ -26,7 +26,7 @@ public class DefaultQueryStore implements QueryStore {
 
 	private void initialiseFields(Properties queryStoreData) {
 		eventTypeQuery = getData(queryStoreData, "eventTypeQuery");
-		eventTypeQueryVariable = getData(queryStoreData, "eventTypeQueryVariable");
+		eventTypeQueryVariable = getData(queryStoreData, "eventTypeQueryVariable").trim(); //deal with hanging whitespace from final entry
 	}
 
 	private String getData(Properties queryStoreData, String identifier) {
