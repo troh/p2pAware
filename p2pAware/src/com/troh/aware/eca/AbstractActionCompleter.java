@@ -44,17 +44,9 @@ public abstract class AbstractActionCompleter implements ActionCompleter {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.troh.aware.eca.ActionCompleter#completeAction(com.hp.hpl.jena.rdf.model.Model, java.util.List)
-	 */
-	@Override
-	public abstract void completeAction(Model event, List<String> rules);
 
-	/* (non-Javadoc)
-	 * @see com.troh.aware.eca.ActionCompleter#completeAction(com.hp.hpl.jena.rdf.model.Model, java.lang.Object[], java.util.List)
-	 */
 	@Override
-	public abstract void completeAction(Model event, Object[] data, List<String> rules);
+	public abstract void completeAction(IncompleteMessage message);
 	
 	protected ActionCompleterComponent getComponentForName(String name) {
 		return completerComponents.get(name);
