@@ -27,11 +27,7 @@ public class DefaultSocketManager implements SocketManager {
 			this.socket = socket;
 			this.dataIn = new DataInputStream(socket.getInputStream());
 		} catch (IOException ex) {
-			try {
-				disconnect();
-			} catch (IOException ex1) {
-				ex1.printStackTrace();
-			}
+			//to do: disconnect
 		}
 	}
 
@@ -67,13 +63,7 @@ public class DefaultSocketManager implements SocketManager {
 	 */
 	@Override
 	public void disconnect() {
-		if (name != null)
-			socketGroup.removeSocketManager(name);
-		if (dataIn != null) {
-			dataIn.close();
-		} else {
-			socket.close();
-		}
+		// to do
 	}
 
 }
