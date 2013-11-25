@@ -43,10 +43,12 @@ public abstract class AbstractActionCompleter implements ActionCompleter {
 		}
 		return false;
 	}
-
-
+	
 	@Override
-	public abstract void completeAction(IncompleteMessage message);
+	public abstract void completeAction(Model event, List<String> actionConditions);
+	@Override
+	public abstract void completeAction(Model event, Object[] data, List<String> actionConditions);
+
 	
 	protected ActionCompleterComponent getComponentForName(String name) {
 		return completerComponents.get(name);

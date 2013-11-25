@@ -14,5 +14,6 @@ import com.hp.hpl.jena.rdf.model.Model;
 public interface ActionCompleter {
 	boolean removeComponent(String name);
 	boolean addComponent(ActionCompleterComponent component);
-	void completeAction(IncompleteMessage message);
+	void completeAction(Model event, List<String> actionConditions);
+	void completeAction(Model event, Object[] data, List<String> actionConditions);
 }

@@ -43,10 +43,13 @@ public class DefaultXMLUtility implements XMLUtility {
 	 */
 	@Override
 	public String transformToString(Document document) throws TransformerException {
-	    StringWriter stringWriter = new StringWriter();
-	    transformer.transform(new DOMSource(document), new StreamResult(stringWriter));
-	    transformer.reset();
-	    return stringWriter.toString();
+		try {
+			StringWriter stringWriter = new StringWriter();
+			transformer.transform(new DOMSource(document), new StreamResult(stringWriter));
+			return stringWriter.toString();
+		} finally {
+			transformer.reset();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -54,10 +57,13 @@ public class DefaultXMLUtility implements XMLUtility {
 	 */
 	@Override
 	public Document buildDocument(String string) throws SAXException, IOException {
-	    InputStream in = new ByteArrayInputStream(string.getBytes());
-	    Document document = builder.parse(in);
-	    builder.reset();
-	    return document;
+		try {
+		    InputStream in = new ByteArrayInputStream(string.getBytes());
+		    Document document = builder.parse(in);
+		    return document;
+		} finally {
+		    builder.reset();
+		}
 	}
 
 	/* (non-Javadoc)
