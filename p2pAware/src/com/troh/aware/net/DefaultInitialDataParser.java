@@ -44,10 +44,10 @@ public class DefaultInitialDataParser implements InitialDataParser {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.troh.aware.net.InitialDataParser#commitIntroData(com.hp.hpl.jena.rdf.model.Model)
+	 * @see com.troh.aware.net.InitialDataParser#commitIntroData()
 	 */
 	@Override
-	public void commitIntroData(Model eventNotification) {
+	public void commitIntroData() {
 		Dataset dataset = repository.getDataset();
 		try {
 			Model model = dataset.getDefaultModel();

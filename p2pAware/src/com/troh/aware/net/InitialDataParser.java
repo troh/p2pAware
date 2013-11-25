@@ -10,6 +10,6 @@ import com.hp.hpl.jena.rdf.model.Model;
  *
  */
 public interface InitialDataParser {
-	void commitIntroData(Model eventNotification);
+	void commitIntroData();
 	String getName();
 }
