@@ -9,4 +9,6 @@ package com.troh.aware.net;
  */
 public interface SocketGroup {
 
+	void send(String recipient, String action, Object[] data);
+
 }

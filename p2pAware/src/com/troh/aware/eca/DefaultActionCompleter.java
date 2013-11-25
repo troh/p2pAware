@@ -41,7 +41,7 @@ public class DefaultActionCompleter extends AbstractActionCompleter {
 				Document incompleteDocument = xmlUtility.buildDocument(each);
 				NodeList handlers = findHandlerElements(incompleteDocument);
 				if (completeWithHandlers(event,incompleteDocument, data, handlers)) {
-					removeHandlerElements(handlers);
+					xmlUtility.removeAllNodes(handlers);
 					actionPoster.post(incompleteDocument, data);
 				}
 			} catch (SAXException ex) {
@@ -49,12 +49,6 @@ public class DefaultActionCompleter extends AbstractActionCompleter {
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
-		}
-	}
-
-	private void removeHandlerElements(NodeList handlers) {
-		while (handlers.getLength() > 0) {
-			handlers.item(0).getParentNode().removeChild(handlers.item(0));
 		}
 	}
 

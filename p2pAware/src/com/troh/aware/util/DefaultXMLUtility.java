@@ -20,6 +20,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -87,6 +88,13 @@ public class DefaultXMLUtility implements XMLUtility {
 		Node firstChild = document.getFirstChild();
 		Node toAdd = document.createElement(tag).appendChild(document.createTextNode(contents));
 		firstChild.appendChild(toAdd);
+	}
+
+	@Override
+	public void removeAllNodes(NodeList nodes) {
+		while (nodes.getLength() > 0) {
+			nodes.item(0).getParentNode().removeChild(nodes.item(0));
+		}
 	}
 
 }

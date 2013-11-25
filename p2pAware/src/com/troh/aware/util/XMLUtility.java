@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -19,4 +20,5 @@ public interface XMLUtility {
 	Document buildDocument(String string) throws SAXException, IOException;
 	String extractSingleTextElement(Document document, String tag);
 	void createElement(String tag, String contents, Document document);
+	void removeAllNodes(NodeList nodes);
 }
