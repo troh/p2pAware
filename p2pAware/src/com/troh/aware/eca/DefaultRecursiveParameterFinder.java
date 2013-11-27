@@ -56,18 +56,16 @@ public class DefaultRecursiveParameterFinder implements RecursiveParameterFinder
 		}
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private Object createStruct(Node currentNode) {
-		Map struct = new HashMap();
+		Map<String, Object> struct = new HashMap<>();
 		while (currentNode != null) {
 			
 		}
 		return struct;
 	}
 	
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	private Object createArray(Node type) {
-		List array = new ArrayList();
+		List<Object> array = new ArrayList<>();
 		Node currentNode = type.getFirstChild();
 		while (currentNode != null) {
 			
