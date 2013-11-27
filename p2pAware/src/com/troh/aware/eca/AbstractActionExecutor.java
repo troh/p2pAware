@@ -3,12 +3,8 @@
  */
 package com.troh.aware.eca;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.xml.sax.SAXException;
-
 /**
  * @author tom
  *

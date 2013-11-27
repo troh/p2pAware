@@ -10,5 +10,5 @@ import org.w3c.dom.Node;
  *
  */
 public interface RecursiveParameterFinder {
-	Object findParameterInNode(Node parameterNode);
+	Object findParameterInNode(Node parameterNode) throws MalformedActionStringException;
 }

@@ -5,10 +5,8 @@ package com.troh.aware.eca;
 
 import java.util.List;
 import java.util.Map;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
-
 import com.troh.aware.util.TagsContainer;
 
 /**
@@ -42,7 +40,7 @@ public class DefaultParameterExtractor implements ParameterExtracter {
 		return parameters;
 	}
 
-	private void populateParameterArray(Object[] parameters, NodeList parameterElements) {
+	private void populateParameterArray(Object[] parameters, NodeList parameterElements) throws MalformedActionStringException {
 		for (int i = 0; i < parameterElements.getLength(); i++) {
 			parameters[i] = recursiveParameterFinder.findParameterInNode(parameterElements.item(i));
 		}
