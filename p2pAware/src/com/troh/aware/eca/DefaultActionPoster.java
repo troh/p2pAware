@@ -50,7 +50,7 @@ public class DefaultActionPoster implements ActionPoster {
 					socketGroup.send(recipient, action, data);
 				}
 			}
-		} catch (TransformerException ex) {
+		} catch (TransformerException | MalformedActionStringException ex) {
 			ex.printStackTrace();
 		}
 	}

@@ -32,7 +32,6 @@ public class DefaultXMLUtility implements XMLUtility {
 	private DocumentBuilder builder;
 	private TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	private Transformer transformer;
-	private static final int FIRST_ELEMENT = 0;
 	
 	public DefaultXMLUtility() throws ParserConfigurationException, TransformerConfigurationException {
 		builder = factory.newDocumentBuilder();
@@ -72,7 +71,7 @@ public class DefaultXMLUtility implements XMLUtility {
 	 */
 	@Override
 	public String extractSingleTextElement(Document document, String tag) {
-		Node node = document.getElementsByTagName(tag).item(FIRST_ELEMENT);
+		Node node = document.getElementsByTagName(tag).item(0);
 		if (node == null) {
 			return null;
 		} else {

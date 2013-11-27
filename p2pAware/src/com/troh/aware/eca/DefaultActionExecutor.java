@@ -1,39 +1,86 @@
-/**
- * 
- */
 package com.troh.aware.eca;
+
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
+import com.troh.aware.util.TagsContainer;
+import com.troh.aware.util.XMLUtility;
 
 /**
  * @author tom
  *
  */
-public class DefaultActionExecutor implements ActionExecutor {
-
-	/* (non-Javadoc)
-	 * @see com.troh.aware.eca.ActionExecutor#execute(java.lang.String)
-	 */
-	@Override
-	public void execute(String action) {
-		// TODO Auto-generated method stub
-
+public class DefaultActionExecutor extends AbstractActionExecutor {
+	private XMLUtility xmlUtility;
+	private TagsContainer tagsContainer;
+	
+	public DefaultActionExecutor(XMLUtility xmlUtility, TagsContainer tagsContainer) {
+		this.tagsContainer = tagsContainer;
+		this.xmlUtility = xmlUtility;
 	}
 
 	/* (non-Javadoc)
-	 * @see com.troh.aware.eca.ActionExecutor#execute(java.lang.String, java.lang.Object[])
+	 * @see com.troh.aware.eca.AbstractActionExecutor#execute(java.lang.String)
 	 */
 	@Override
-	public void execute(String action, Object[] data) {
-		// TODO Auto-generated method stub
-
+	public void execute(String action) throws MalformedActionStringException {
+		execute(action, null);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.troh.aware.eca.ActionExecutor#addExecutionObject(java.lang.String, java.lang.Object)
+	 * @see com.troh.aware.eca.AbstractActionExecutor#execute(java.lang.String, java.lang.Object[])
 	 */
 	@Override
-	public void addExecutionObject(String identifier, Object executor) {
+	public void execute(String action, Object[] data) throws MalformedActionStringException {
+		Document actionDocument = null;
+		try {
+			actionDocument = xmlUtility.buildDocument(action);
+		} catch (IOException | SAXException ex) {
+			System.out.println("ERROR: Unable to parse incoming action string. Exiting execute method.");
+			ex.printStackTrace();
+			return;
+		}
+		String className = xmlUtility.extractSingleTextElement(actionDocument, tagsContainer.getClassTag());
+		String methodName = xmlUtility.extractSingleTextElement(actionDocument, tagsContainer.getMethodTag());
+		if (className == null || methodName == null) {
+			throw new MalformedActionStringException();
+		}
+		boolean hasAdditionalData = (data != null);
+		Object[] parameters = extractParameters(actionDocument, hasAdditionalData);
+		Object executor = getExecutor(className);
+		if (executor == null) {
+			throw new MalformedActionStringException("No executor with class name as in action string found.");
+		}
+		executeMethodOnObjectWithParams(methodName, parameters, executor);
+	}
+	
+	private void executeMethodOnObjectWithParams(String methodName, Object[] parameters, Object executor) {
+		Class<?> aClass = executor.getClass();
+		Class<?>[] parameterTypes = extractParameterTypes(parameters);
+		try {
+			Method method = aClass.getMethod(methodName, parameterTypes); //extractParams and extractParamTypes must return null if they find nothing
+			method.invoke(executor, parameters);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException 
+				| IllegalArgumentException
+				| InvocationTargetException e) {
+			System.out.println("ERROR: Unable to execute method on class with parameters as found in incoming action string.");
+			e.printStackTrace();
+		}
+	}
+	
+	private Class<?>[] extractParameterTypes(Object[] parameters) {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	private Object[] extractParameters(Document actionDocument,
+			boolean hasAdditionalData) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
