@@ -17,10 +17,12 @@ import com.troh.aware.util.XMLUtility;
 public class DefaultActionExecutor extends AbstractActionExecutor {
 	private XMLUtility xmlUtility;
 	private TagsContainer tagsContainer;
+	private ParameterExtracter parameterExtracter;
 	
-	public DefaultActionExecutor(XMLUtility xmlUtility, TagsContainer tagsContainer) {
+	public DefaultActionExecutor(XMLUtility xmlUtility, TagsContainer tagsContainer, ParameterExtracter parameterExtracter) {
 		this.tagsContainer = tagsContainer;
 		this.xmlUtility = xmlUtility;
+		this.parameterExtracter = parameterExtracter;
 	}
 
 	/* (non-Javadoc)
@@ -49,38 +51,23 @@ public class DefaultActionExecutor extends AbstractActionExecutor {
 		if (className == null || methodName == null) {
 			throw new MalformedActionStringException();
 		}
-		boolean hasAdditionalData = (data != null);
-		Object[] parameters = extractParameters(actionDocument, hasAdditionalData);
+		Object[] parameters = parameterExtracter.extractParameters(actionDocument, data);
 		Object executor = getExecutor(className);
 		if (executor == null) {
 			throw new MalformedActionStringException("No executor with class name as in action string found.");
 		}
-		executeMethodOnObjectWithParams(methodName, parameters, executor);
+		executeMethodOnObjectWithParameters(methodName, parameters, executor);
 	}
 	
-	private void executeMethodOnObjectWithParams(String methodName, Object[] parameters, Object executor) {
-		Class<?> aClass = executor.getClass();
-		Class<?>[] parameterTypes = extractParameterTypes(parameters);
+	private void executeMethodOnObjectWithParameters(String methodName, Object[] parameters, Object object) throws MalformedActionStringException {
+		Class<?> aClass = object.getClass();
+		Class<?>[] parameterTypes = parameterExtracter.extractParameterTypes(parameters);
 		try {
 			Method method = aClass.getMethod(methodName, parameterTypes); //extractParams and extractParamTypes must return null if they find nothing
-			method.invoke(executor, parameters);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException 
-				| IllegalArgumentException
-				| InvocationTargetException e) {
+			method.invoke(object, parameters);
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			System.out.println("ERROR: Unable to execute method on class with parameters as found in incoming action string.");
 			e.printStackTrace();
 		}
 	}
-	
-	private Class<?>[] extractParameterTypes(Object[] parameters) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private Object[] extractParameters(Document actionDocument,
-			boolean hasAdditionalData) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }
