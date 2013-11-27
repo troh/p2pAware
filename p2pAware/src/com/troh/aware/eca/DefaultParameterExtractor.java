@@ -10,7 +10,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
 import com.troh.aware.util.TagsContainer;
-import com.troh.aware.util.XMLUtility;
 
 /**
  * @author tom
@@ -19,12 +18,12 @@ import com.troh.aware.util.XMLUtility;
 public class DefaultParameterExtractor implements ParameterExtracter {
 	private String MAP_TYPE = "HashMap";
 	private String LIST_TYPE = "ArrayList";
-	private XMLUtility xmlUtility;
 	private TagsContainer tagsContainer;
+	private RecursiveParameterFinder recursiveParameterFinder;
 	
-	public DefaultParameterExtractor(XMLUtility xmlUtility, TagsContainer tagsContainer) {
-		this.xmlUtility = xmlUtility;
+	public DefaultParameterExtractor(TagsContainer tagsContainer, RecursiveParameterFinder recursiveParameterFinder) {
 		this.tagsContainer = tagsContainer;
+		this.recursiveParameterFinder = recursiveParameterFinder;
 	}
 	
 	/* (non-Javadoc)
@@ -37,10 +36,16 @@ public class DefaultParameterExtractor implements ParameterExtracter {
 		if (additionalData != null)
 			numberOfParameters++;
 		Object[] parameters = new Object[numberOfParameters];
-		//Find parameter here
+		populateParameterArray(parameters, parameterElements);//Find parameter here
 		if (additionalData != null)
 			parameters[numberOfParameters-1] = additionalData;
 		return parameters;
+	}
+
+	private void populateParameterArray(Object[] parameters, NodeList parameterElements) {
+		for (int i = 0; i < parameterElements.getLength(); i++) {
+			parameters[i] = recursiveParameterFinder.findParameterInNode(parameterElements.item(i));
+		}
 	}
 
 	private NodeList getParameterElements(Document actionDocument) {
